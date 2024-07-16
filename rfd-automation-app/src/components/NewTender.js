@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
-import { Input } from './ui/input';
+import { AnimatedCard, AnimatedButton, AnimatedInput } from './ui/animated';
 import StandardForms from './StandardForms';
 import ExperienceManagement from './ExperienceManagement';
 import TimelineCreation from './TimelineCreation';
@@ -41,14 +41,14 @@ const NewTender = () => {
       case 'basic':
         return (
           <div>
-            <Input
+            <AnimatedInput
               name="title"
               value={tenderData.title}
               onChange={handleInputChange}
               placeholder="Tender Title"
               className="mb-2"
             />
-            <Input
+            <AnimatedInput
               name="description"
               value={tenderData.description}
               onChange={handleInputChange}
@@ -72,7 +72,7 @@ const NewTender = () => {
   };
 
   return (
-    <Card className="w-full">
+    <AnimatedCard className="w-full">
       <CardHeader>
         <CardTitle>Create New Tender</CardTitle>
       </CardHeader>
@@ -80,33 +80,33 @@ const NewTender = () => {
         <div className="mb-4">
           <div className="flex justify-between mb-2">
             {steps.map((step, index) => (
-              <Button
+              <AnimatedButton
                 key={step.id}
                 variant={currentStep === index ? 'default' : 'outline'}
                 onClick={() => setCurrentStep(index)}
               >
                 {step.title}
-              </Button>
+              </AnimatedButton>
             ))}
           </div>
-          <div className="h-1 w-full bg-gray-200">
+          <div className="h-1 w-full bg-gray-200 rounded-full overflow-hidden">
             <div
-              className="h-1 bg-blue-500 transition-all duration-300 ease-in-out"
+              className="h-1 bg-blue-500 transition-all duration-300 ease-in-out rounded-full"
               style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
             ></div>
           </div>
         </div>
         {renderStep()}
         <div className="mt-4 flex justify-between">
-          <Button onClick={prevStep} disabled={currentStep === 0}>
+          <AnimatedButton onClick={prevStep} disabled={currentStep === 0}>
             Previous
-          </Button>
-          <Button onClick={nextStep} disabled={currentStep === steps.length - 1}>
+          </AnimatedButton>
+          <AnimatedButton onClick={nextStep} disabled={currentStep === steps.length - 1}>
             {currentStep === steps.length - 1 ? 'Finish' : 'Next'}
-          </Button>
+          </AnimatedButton>
         </div>
       </CardContent>
-    </Card>
+    </AnimatedCard>
   );
 };
 

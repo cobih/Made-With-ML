@@ -1,25 +1,28 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Button } from './ui/button';
+import { AnimatedButton } from './ui/animated';
 import { Input } from './ui/input';
+import { useAuth } from '../contexts/AuthContext';
 
 const DocumentUpload = () => {
   const [documents, setDocuments] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
+  const { user } = useAuth();
 
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]);
   };
 
   const handleUpload = () => {
-    if (selectedFile) {
+    if (selectedFile && user) {
       // In a real application, you would handle the file upload to a server here
       // For this example, we'll just add the file info to our list
       setDocuments(prev => [...prev, {
         id: Date.now(),
         name: selectedFile.name,
         size: selectedFile.size,
-        type: selectedFile.type
+        type: selectedFile.type,
+        uploadedBy: user.username
       }]);
       setSelectedFile(null);
     }
@@ -41,9 +44,9 @@ const DocumentUpload = () => {
             onChange={handleFileChange}
             className="mb-2"
           />
-          <Button onClick={handleUpload} disabled={!selectedFile}>
+          <AnimatedButton onClick={handleUpload} disabled={!selectedFile || !user}>
             Upload Document
-          </Button>
+          </AnimatedButton>
         </div>
         <div>
           <h3 className="text-lg font-semibold mb-2">Uploaded Documents</h3>
@@ -56,12 +59,12 @@ const DocumentUpload = () => {
                   <div>
                     <p><strong>{doc.name}</strong></p>
                     <p className="text-sm text-gray-500">
-                      {(doc.size / 1024).toFixed(2)} KB | {doc.type}
+                      {(doc.size / 1024).toFixed(2)} KB | {doc.type} | Uploaded by: {doc.uploadedBy}
                     </p>
                   </div>
-                  <Button onClick={() => handleDelete(doc.id)} variant="destructive" size="sm">
+                  <AnimatedButton onClick={() => handleDelete(doc.id)} variant="destructive" size="sm">
                     Delete
-                  </Button>
+                  </AnimatedButton>
                 </li>
               ))}
             </ul>
